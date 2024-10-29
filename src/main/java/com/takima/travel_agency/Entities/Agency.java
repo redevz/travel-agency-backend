@@ -1,23 +1,35 @@
 package com.takima.travel_agency.Entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
-@Table
+@Table(name = "agency")
 public class Agency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String companyName;
     private String address;
     private String website;
     private String email;
     private String phoneNumber;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "agency")
+    private List<Travel> travels;
 
     public Agency() {}
 
-    public Agency(Integer id, String companyName, String address, String website, String email, String phoneNumber) {
+    public Agency(
+            Integer id,
+            String companyName,
+            String address,
+            String website,
+            String email,
+            String phoneNumber
+    ) {
         this.id = id;
         this.companyName = companyName;
         this.address = address;
@@ -72,5 +84,14 @@ public class Agency {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    @JsonManagedReference
+    public List<Travel> getTravels() {
+        return travels;
+    }
+
+    public void setTravels(List<Travel> travels) {
+        this.travels = travels;
     }
 }

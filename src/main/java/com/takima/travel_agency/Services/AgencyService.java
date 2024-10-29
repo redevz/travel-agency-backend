@@ -12,14 +12,22 @@ public class AgencyService {
     @Autowired
     private AgencyRepository _repository;
 
-    public void register(Agency agency) {
-        this._repository.save(agency);
+    public Agency createAgency(Agency agency) {
+        if (!this._repository.findAll().isEmpty()) {
+            return null;
+        }
+        return this._repository.save(agency);
     }
 
-    public Optional<Agency> getMyAgency() {
-        if (this._repository.findAll().isEmpty()) {
-            return Optional.empty();
+    public Agency getAgencyById(Integer id) {
+        Optional<Agency> agency = this._repository.findById(id);
+        return agency.orElse(null);
+    }
+
+    public Agency updateAgency(Agency agency) {
+        if (agency.getId() == null) {
+            return null;
         }
-        return Optional.ofNullable(this._repository.findAll().getFirst());
+        return this._repository.save(agency);
     }
 }
